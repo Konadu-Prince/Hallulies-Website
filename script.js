@@ -53,39 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Handle room booking buttons
-document.addEventListener('DOMContentLoaded', function() {
-    const bookingButtons = document.querySelectorAll('.room-card .btn-primary');
-    if (bookingButtons.length > 0) {
-        bookingButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                // Get the room type from the data attribute
-                const roomType = this.getAttribute('data-room');
-                
-                // Scroll to the booking form
-                const bookingSection = document.getElementById('booking');
-                if (bookingSection) {
-                    // Set the room type in the dropdown
-                    const roomTypeSelect = document.getElementById('room-type');
-                    if (roomTypeSelect) {
-                        roomTypeSelect.value = roomType;
-                    }
-                    
-                    // Scroll to the booking section
-                    bookingSection.scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Highlight the form for better UX
-                    const bookingForm = document.getElementById('booking-form');
-                    if (bookingForm) {
-                        bookingForm.style.boxShadow = '0 0 15px rgba(255, 165, 0, 0.5)';
-                        setTimeout(() => {
-                            bookingForm.style.boxShadow = '';
-                        }, 3000);
-                    }
-                }
-            });
-        });
-    }
-});
+// Note: Room booking buttons now link directly to booking.html
 
 // Scroll to top functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -722,7 +690,7 @@ Special Requests: ${document.getElementById('special-requests') ? document.getEl
         }
         
         // Send email using EmailJS
-        emailjs.send('YOUR_SERVICE_ID_HERE', templateId, templateParams)
+        emailjs.send('service_duhsvl9', templateId, templateParams)
             .then(function(response) {
                 console.log('SUCCESS!', response.status, response.text);
                 
