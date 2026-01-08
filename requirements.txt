@@ -1,0 +1,2 @@
+# No specific Python dependencies needed for the static file server
+# Python built-in modules are sufficient for serving static files
