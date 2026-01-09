@@ -39,18 +39,20 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="checkin">Check-in Date *</label>
-                        <input type="date" id="checkin" name="checkin" required>
+                        <input type="date" id="checkin" name="checkin" required aria-describedby="checkin-help">
+                        <small id="checkin-help" class="form-help">Select your arrival date</small>
                     </div>
                     <div class="form-group">
                         <label for="checkout">Check-out Date *</label>
-                        <input type="date" id="checkout" name="checkout" required>
+                        <input type="date" id="checkout" name="checkout" required aria-describedby="checkout-help">
+                        <small id="checkout-help" class="form-help">Select your departure date</small>
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="adults">Adults *</label>
-                        <select id="adults" name="adults" required>
+                        <select id="adults" name="adults" required aria-describedby="adults-help">
                             <option value="">Select Adults</option>
                             <option value="1">1 Adult</option>
                             <option value="2" selected>2 Adults</option>
@@ -58,15 +60,17 @@
                             <option value="4">4 Adults</option>
                             <option value="5+">5+ Adults</option>
                         </select>
+                        <small id="adults-help" class="form-help">Number of adults staying</small>
                     </div>
                     <div class="form-group">
                         <label for="children">Children</label>
-                        <select id="children" name="children">
+                        <select id="children" name="children" aria-describedby="children-help">
                             <option value="0" selected>No Children</option>
                             <option value="1">1 Child</option>
                             <option value="2">2 Children</option>
                             <option value="3">3 Children</option>
                         </select>
+                        <small id="children-help" class="form-help">Number of children staying</small>
                     </div>
                 </div>
                 
@@ -89,11 +93,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="email" inputmode="email" aria-describedby="email-help">
+                        <small id="email-help" class="form-help">We'll send your booking confirmation here</small>
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number *</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required autocomplete="tel" inputmode="tel" aria-describedby="phone-help">
+                        <small id="phone-help" class="form-help">Include country code (e.g. +233XXXXXXXXX)</small>
                     </div>
                 </div>
                 

@@ -949,6 +949,7 @@ input, select, textarea {
     font-size: 1rem;
     transition: var(--transition);
     background-color: rgba(255, 255, 255, 0.9);
+    box-sizing: border-box;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -1256,6 +1257,88 @@ footer {
     100% { transform: rotate(360deg); }
 }
 
+/* Booking Form Specific Responsive Styles */
+@media (max-width: 768px) {
+    #booking-form {
+        padding: 20px;
+        margin: 20px 15px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    input, select, textarea {
+        padding: 12px;
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        padding: 14px 20px;
+        font-size: 1rem;
+    }
+    
+    .btn-primary .btn-text,
+    .btn-primary .btn-loading {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #booking-form {
+        padding: 15px;
+        margin: 15px 10px;
+    }
+    
+    .form-row {
+        gap: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 12px;
+    }
+    
+    input, select, textarea {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    label {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+    
+    .btn-primary {
+        padding: 12px 15px;
+    }
+    
+    .btn-primary .btn-text,
+    .btn-primary .btn-loading {
+        font-size: 0.9rem;
+    }
+}
+
+/* Tablet specific adjustments */
+@media (max-width: 992px) and (min-width: 769px) {
+    #booking-form {
+        padding: 25px;
+        margin: 25px 20px;
+    }
+    
+    .form-row {
+        gap: 18px;
+    }
+    
+    input, select, textarea {
+        padding: 11px;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
     .container {
@@ -1315,6 +1398,7 @@ footer {
         box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
         padding: 20px 0;
         margin-top: 0;
+        z-index: 1001;
     }
     
     nav ul.active {
