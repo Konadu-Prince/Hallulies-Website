@@ -96,7 +96,8 @@ function initGalleryModals() {
     document.body.appendChild(imageModal);
     
     // Handle expand button clicks for images
-    document.querySelectorAll('.gallery-item .expand-btn').forEach((btn, index) => {
+    const expandButtons = document.querySelectorAll('.gallery-item .expand-btn');
+    expandButtons.forEach((btn, index) => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
             const imgSrc = this.closest('.gallery-item').querySelector('img').src;
@@ -106,7 +107,8 @@ function initGalleryModals() {
     });
     
     // Handle double-click on images to expand them
-    document.querySelectorAll('.gallery-item').forEach((item, index) => {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    galleryItems.forEach((item, index) => {
         item.addEventListener('dblclick', function(e) {
             // Prevent double-click from triggering if it's on the expand button itself
             if (e.target.classList.contains('expand-btn')) return;
@@ -125,6 +127,13 @@ function initGalleryModals() {
     // Close modals when clicking outside
     imageModal.addEventListener('click', function(e) {
         if (e.target === imageModal) {
+            imageModal.style.display = 'none';
+        }
+    });
+    
+    // Add keyboard support (ESC key to close modal)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && imageModal.style.display === 'flex') {
             imageModal.style.display = 'none';
         }
     });
