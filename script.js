@@ -102,7 +102,7 @@ function initGalleryModals() {
             e.stopPropagation();
             const imgSrc = this.closest('.gallery-item').querySelector('img').src;
             imageModalImg.src = imgSrc;
-            imageModal.style.display = 'flex';
+            imageModal.classList.add('active');
         });
     });
     
@@ -115,26 +115,26 @@ function initGalleryModals() {
             
             const imgSrc = this.querySelector('img').src;
             imageModalImg.src = imgSrc;
-            imageModal.style.display = 'flex';
+            imageModal.classList.add('active');
         });
     });
     
     // Close image modal
     closeImageModalBtn.addEventListener('click', function() {
-        imageModal.style.display = 'none';
+        imageModal.classList.remove('active');
     });
     
     // Close modals when clicking outside
     imageModal.addEventListener('click', function(e) {
         if (e.target === imageModal) {
-            imageModal.style.display = 'none';
+            imageModal.classList.remove('active');
         }
     });
     
     // Add keyboard support (ESC key to close modal)
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && imageModal.style.display === 'flex') {
-            imageModal.style.display = 'none';
+        if (e.key === 'Escape') {
+            imageModal.classList.remove('active');
         }
     });
 }
