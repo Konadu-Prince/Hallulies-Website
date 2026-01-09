@@ -209,65 +209,42 @@ function initTestimonialForm() {
         submitButton.textContent = 'Submitting...';
         submitButton.disabled = true;
         
-        // Submit testimonial
-        // Determine the correct base URL (Render.com when on GitHub Pages)
-        let baseUrl = window.location.origin;
-        
-        // Check if we're on GitHub Pages and use Render.com server instead
-        if (window.location.hostname.includes('github.io')) {
-            // Use your Render.com server URL for form submissions when hosted on GitHub Pages
-            baseUrl = 'https://your-deployed-url.onrender.com'; // Replace with your actual Render.com URL
-        }
-        
-        fetch(`${baseUrl}/add-testimonial`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-                location: location,
-                rating: rating,
-                comment: comment
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert(data.message);
-                form.reset();
-                
-                // Refresh testimonials
-                // Determine the correct base URL (Render.com when on GitHub Pages)
-                let baseUrl = window.location.origin;
-                
-                // Check if we're on GitHub Pages and use Render.com server instead
-                if (window.location.hostname.includes('github.io')) {
-                    // Use your Render.com server URL for form submissions when hosted on GitHub Pages
-                    baseUrl = 'https://your-deployed-url.onrender.com';
-                }
-                
-                fetch(`${baseUrl}/testimonials.json`)
-                    .then(response => response.json())
-                    .then(testimonials => {
-                        const marquee = document.querySelector('.testimonial-marquee');
-                        if (marquee) {
-                            // Reinitialize marquee with new testimonials
-                            initTestimonialMarquee();
-                        }
-                    });
+        // Send testimonial via EmailJS
+        const templateParams = {
+            from_name: name,
+            location: location,
+            rating: rating,
+            comment: comment,
+            message: `New Testimonial Received:
 
-            } else {
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error submitting testimonial:', error);
-            alert('Failed to submit testimonial. Please try again later.');
-        })
-        .finally(() => {
+Name: ${name}
+Location: ${location}
+Rating: ${rating} stars
+Comment: ${comment}`
+        };
+        
+        emailjs.send('service_duhsvl9', 'template_testimonial', templateParams)
+        .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            
+            // Reset button
             submitButton.textContent = originalText;
             submitButton.disabled = false;
+            
+            // Show success message
+            alert('Thank you for sharing your experience! Your testimonial has been received.');
+            
+            // Reset form
+            form.reset();
+        }, function(error) {
+            console.log('FAILED...', error);
+            
+            // Reset button
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+            
+            // Show error message
+            alert('There was an error sending your testimonial. Please try again or contact us directly. Error: ' + error.text);
         });
     });
 }
@@ -775,5 +752,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         handleFormSubmitWithEmailJS('contact-form', 'template_contact_form');
+    }
+    
+    // Initialize testimonial form if it exists
+    const testimonialForm = document.getElementById('testimonial-form');
+    if (testimonialForm) {
+        initTestimonialForm();
     }
 });
