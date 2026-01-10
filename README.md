@@ -1,6 +1,6 @@
-# Hallulies Pub - Luxury Venue & Restaurant
+# Hallulies Hotel & Restaurant/Bar - Luxury Venue & Restaurant
 
-Welcome to Hallulies Pub, a luxury venue and restaurant located in Asufufu-Sunyani, Ghana. This website serves as the digital presence for our establishment, offering information about our accommodations, restaurant services, and booking capabilities.
+Welcome to Hallulies Hotel & Restaurant/Bar, a luxury venue and restaurant located in Asufufu-Sunyani, Ghana. This website serves as the digital presence for our establishment, offering information about our accommodations, restaurant services, and booking capabilities.
 
 ## Features
 
@@ -151,4 +151,4 @@ For support, please contact us at:
 
 ---
 
-© 2025 Hallulies Pub. All rights reserved.
+© 2025 Hallulies Hotel & Restaurant/Bar. All rights reserved.
