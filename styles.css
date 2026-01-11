@@ -31,6 +31,19 @@
     margin-top: 10px;
 }
 
+.pdf-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.pdf-actions .btn-primary,
+.pdf-actions .btn-secondary {
+    margin: 0;
+}
+
 /* Base Styles */
 :root {
     --primary-color: #d2691e; /* Chocolate brown color */
