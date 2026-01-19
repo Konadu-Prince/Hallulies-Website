@@ -434,7 +434,7 @@ section h2::after {
 
 .restaurant-gallery .gallery-item img {
     width: 100%;
-    height: 255px;
+    height: 260px;
     object-fit: cover;
     border-radius: 15px;
     transition: transform 0.3s ease;
