@@ -136,14 +136,114 @@
                 </div>
                 
                 <div class="form-group">
+                    <label>Payment Method</label>
+                    <div class="payment-methods">
+                        <div class="payment-option">
+                            <input type="radio" id="pay-later" name="payment_method" value="pay_later" checked>
+                            <label for="pay-later">Pay Later at Hotel</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="mobile-money" name="payment_method" value="mobile_money">
+                            <label for="mobile-money">Mobile Money (MTN, Vodafone, AirtelTigo)</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="credit-card" name="payment_method" value="credit_card">
+                            <label for="credit-card">Credit/Debit Card</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="bank-transfer" name="payment_method" value="bank_transfer">
+                            <label for="bank-transfer">Bank Transfer</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile Money Payment Section -->
+                <div class="payment-section" id="mobile-money-section" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mobile-number">Mobile Number *</label>
+                            <input type="tel" id="mobile-number" name="mobile_number" placeholder="e.g., 0241234567" maxlength="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile-network">Network *</label>
+                            <select id="mobile-network" name="mobile_network">
+                                <option value="">Select Network</option>
+                                <option value="mtn">MTN</option>
+                                <option value="vodafonenet">Vodafone</option>
+                                <option value="airteltigo">AirtelTigo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Credit Card Payment Section -->
+                <div class="payment-section" id="credit-card-section" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="card-number">Card Number *</label>
+                            <input type="text" id="card-number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="card-holder">Cardholder Name *</label>
+                            <input type="text" id="card-holder" name="card_holder" placeholder="As appears on card">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry-date">Expiry Date *</label>
+                            <input type="text" id="expiry-date" name="expiry_date" placeholder="MM/YY" maxlength="5" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV *</label>
+                            <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bank Transfer Payment Section -->
+                <div class="payment-section" id="bank-transfer-section" style="display: none;">
+                    <div class="bank-transfer-info">
+                        <h4>Bank Transfer Instructions</h4>
+                        <p>Please transfer the amount to:</p>
+                        <div class="bank-details">
+                            <p><strong>Bank:</strong> Access Bank Ghana Ltd</p>
+                            <p><strong>Account Name:</strong> HALLULIES HOTEL & RESTAURANT/Bar</p>
+                            <p><strong>Account Number:</strong> 1234567890</p>
+                            <p><strong>Reference:</strong> BOOKING-[DATE]-[NAME]</p>
+                        </div>
+                        <p class="note">Please attach proof of payment to your confirmation email.</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="terms" name="terms" required>
                         I agree to the <a href="#" target="_blank">Terms & Conditions</a> *
                     </label>
                 </div>
                 
+                <div class="payment-summary">
+                    <h3>Booking Summary</h3>
+                    <div class="summary-item">
+                        <span>Room Type:</span>
+                        <span id="summary-room-type">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Duration:</span>
+                        <span id="summary-duration">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Nights:</span>
+                        <span id="summary-nights">-</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total Amount:</span>
+                        <span id="summary-total">₵0.00</span>
+                    </div>
+                </div>
+                
                 <button type="submit" class="btn-primary" id="submit-btn">
-                    <span class="btn-text">Check Availability & Prices</span>
+                    <span class="btn-text">Complete Booking</span>
                     <span class="btn-loading" style="display: none;">
                         <i class="fas fa-spinner fa-spin"></i> Processing...
                     </span>

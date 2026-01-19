@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Experience | Hallulies Hotel</title>
+    <meta name="description" content="Share your experience at Hallulies Hotel & Restaurant/Bar in Asufufu-Sunyani. Your feedback helps us improve our services.">
+    <meta name="keywords" content="testimonial, review, feedback, hotel review, customer experience">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="images/signboardTheBuilding.jpeg" alt="Hallulies Logo">
+                <h1>HALLULIES HOTEL & RESTAURANT/BAR</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#rooms">Rooms</a></li>
+                    <li><a href="restaurant.html">Restaurant</a></li>
+                    <li><a href="testimonial.html">Reviews</a></li>
+                    <li><a href="testimonial-form.html" class="btn-primary">Share Experience</a></li>
+                    <li><a href="booking.html">Book Now</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-testimonial-form">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Share Your Experience</h1>
+                <p>We'd love to hear about your stay at Hallulies Hotel. Your feedback helps us improve our services.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Form Section -->
+    <section class="testimonial-form-section">
+        <div class="container">
+            <div class="form-container">
+                <h2>Tell Us About Your Experience</h2>
+                <p>Your review matters to us. Please share your honest feedback about your stay.</p>
+                
+                <form id="testimonial-form-full" class="testimonial-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="full-testimonial-name">Full Name *</label>
+                            <input type="text" id="full-testimonial-name" name="name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="full-testimonial-location">Location</label>
+                            <input type="text" id="full-testimonial-location" name="location" placeholder="City, Country">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="full-testimonial-stay-date">Date of Stay</label>
+                        <input type="date" id="full-testimonial-stay-date" name="stay_date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="full-testimonial-room-type">Room Type</label>
+                        <select id="full-testimonial-room-type" name="room_type">
+                            <option value="">Select room type</option>
+                            <option value="luxury">Luxury Suite</option>
+                            <option value="standard">Standard Room</option>
+                            <option value="family">Family Room</option>
+                            <option value="event-hall">Event Hall</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Overall Rating *</label>
+                        <div class="rating-input">
+                            <div class="stars-selector">
+                                <input type="radio" id="full-star5" name="rating" value="5" required>
+                                <label for="full-star5" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Excellent</span>
+                                </label>
+                                
+                                <input type="radio" id="full-star4" name="rating" value="4">
+                                <label for="full-star4" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Very Good</span>
+                                </label>
+                                
+                                <input type="radio" id="full-star3" name="rating" value="3">
+                                <label for="full-star3" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Good</span>
+                                </label>
+                                
+                                <input type="radio" id="full-star2" name="rating" value="2">
+                                <label for="full-star2" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Fair</span>
+                                </label>
+                                
+                                <input type="radio" id="full-star1" name="rating" value="1">
+                                <label for="full-star1" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Poor</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="full-testimonial-title">Review Title *</label>
+                        <input type="text" id="full-testimonial-title" name="title" required placeholder="Summarize your experience">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="full-testimonial-comment">Your Review *</label>
+                        <textarea id="full-testimonial-comment" name="comment" rows="6" required placeholder="Tell us about your experience..."></textarea>
+                        <div class="char-count">
+                            <span id="full-char-counter">0/1000 characters</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="full-testimonial-service">Service Rating</label>
+                        <div class="rating-input">
+                            <div class="stars-selector">
+                                <input type="radio" id="full-service-5" name="service_rating" value="5">
+                                <label for="full-service-5" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Excellent</span>
+                                </label>
+                                
+                                <input type="radio" id="full-service-4" name="service_rating" value="4">
+                                <label for="full-service-4" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Very Good</span>
+                                </label>
+                                
+                                <input type="radio" id="full-service-3" name="service_rating" value="3">
+                                <label for="full-service-3" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Good</span>
+                                </label>
+                                
+                                <input type="radio" id="full-service-2" name="service_rating" value="2">
+                                <label for="full-service-2" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Fair</span>
+                                </label>
+                                
+                                <input type="radio" id="full-service-1" name="service_rating" value="1">
+                                <label for="full-service-1" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Poor</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="full-testimonial-amenities">Amenities Rating</label>
+                        <div class="rating-input">
+                            <div class="stars-selector">
+                                <input type="radio" id="full-amenities-5" name="amenities_rating" value="5">
+                                <label for="full-amenities-5" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Excellent</span>
+                                </label>
+                                
+                                <input type="radio" id="full-amenities-4" name="amenities_rating" value="4">
+                                <label for="full-amenities-4" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Very Good</span>
+                                </label>
+                                
+                                <input type="radio" id="full-amenities-3" name="amenities_rating" value="3">
+                                <label for="full-amenities-3" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Good</span>
+                                </label>
+                                
+                                <input type="radio" id="full-amenities-2" name="amenities_rating" value="2">
+                                <label for="full-amenities-2" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Fair</span>
+                                </label>
+                                
+                                <input type="radio" id="full-amenities-1" name="amenities_rating" value="1">
+                                <label for="full-amenities-1" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Poor</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="full-recommend" name="recommend" checked>
+                            <span class="checkmark"></span>
+                            I would recommend Hallulies to friends and family
+                        </label>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="full-newsletter" name="newsletter">
+                            <span class="checkmark"></span>
+                            Subscribe to our newsletter for special offers
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">
+                        <span class="btn-text">Submit Review</span>
+                        <span class="btn-loading" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i> Submitting...
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/signboardTheBuilding.jpeg" alt="Hallulies Logo">
+                    <p>Experience luxury and comfort at Hallulies Hotel & Restaurant/Bar, where every stay is a memorable journey.</p>
+                    <div class="social-links">
+                        <p>Follow us:</p>
+                        <a href="#"><i class="fab fa-facebook"></i> Facebook</a><br>
+                        <a href="#"><i class="fab fa-instagram"></i> Instagram</a><br>
+                        <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#rooms">Rooms</a></li>
+                        <li><a href="restaurant.html">Restaurant</a></li>
+                        <li><a href="testimonial.html">Reviews</a></li>
+                        <li><a href="testimonial-form.html">Share Experience</a></li>
+                        <li><a href="booking.html">Booking</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="social-media">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Asufufu-Sunyani, Ghana</p>
+                    <p><i class="fas fa-phone"></i> 0247533518</p>
+                    <p><i class="fas fa-envelope"></i> hallulies6@gmail.com</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Hallulies Hotel & Restaurant/Bar. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Initialize testimonial form
+        document.addEventListener('DOMContentLoaded', function() {
+            initFullTestimonialForm();
+        });
+
+        function initFullTestimonialForm() {
+            const form = document.getElementById('testimonial-form-full');
+            if (!form) return;
+
+            // Character counter for review textarea
+            const reviewTextarea = document.getElementById('full-testimonial-comment');
+            const charCounter = document.getElementById('full-char-counter');
+            
+            if (reviewTextarea && charCounter) {
+                reviewTextarea.addEventListener('input', function() {
+                    const length = this.value.length;
+                    charCounter.textContent = `${length}/1000 characters`;
+                    
+                    if (length > 1000) {
+                        charCounter.style.color = '#e74c3c';
+                    } else {
+                        charCounter.style.color = '';
+                    }
+                });
+            }
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const name = document.getElementById('full-testimonial-name').value;
+                const location = document.getElementById('full-testimonial-location').value;
+                const rating = document.querySelector('input[name="rating"]:checked')?.value || '';
+                const title = document.getElementById('full-testimonial-title').value;
+                const comment = document.getElementById('full-testimonial-comment').value;
+                const stayDate = document.getElementById('full-testimonial-stay-date').value;
+                const roomType = document.getElementById('full-testimonial-room-type').value;
+                const serviceRating = document.querySelector('input[name="service_rating"]:checked')?.value || '';
+                const amenitiesRating = document.querySelector('input[name="amenities_rating"]:checked')?.value || '';
+                
+                // Validate form
+                if (!name || !rating || !title || !comment) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+
+                // Create loading spinner
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalText = submitButton.querySelector('.btn-text');
+                const loadingSpinner = submitButton.querySelector('.btn-loading');
+                
+                originalText.style.display = 'none';
+                loadingSpinner.style.display = 'inline-block';
+                submitButton.disabled = true;
+
+                // Create template parameters for EmailJS
+                const templateParams = {
+                    from_name: name,
+                    location: location,
+                    rating: rating,
+                    title: title,
+                    comment: comment,
+                    stay_date: stayDate,
+                    room_type: roomType,
+                    service_rating: serviceRating,
+                    amenities_rating: amenitiesRating,
+                    message: `New Testimonial Received:
+
+From: ${name}
+Location: ${location}
+Stay Date: ${stayDate}
+Room Type: ${roomType}
+Overall Rating: ${rating} stars
+Service Rating: ${serviceRating} stars
+Amenities Rating: ${amenitiesRating} stars
+Review Title: ${title}
+Review: ${comment}`
+                };
+
+                // Send testimonial via EmailJS
+                emailjs.send('service_duhsvl9', 'template_testimonial', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Reset button
+                    originalText.style.display = 'inline';
+                    loadingSpinner.style.display = 'none';
+                    submitButton.disabled = false;
+                    
+                    // Show success message
+                    alert('Thank you for sharing your experience! Your testimonial has been received and will be reviewed.');
+                    
+                    // Reset form
+                    form.reset();
+                })
+                .catch(function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Reset button
+                    originalText.style.display = 'inline';
+                    loadingSpinner.style.display = 'none';
+                    submitButton.disabled = false;
+                    
+                    // Show error message
+                    alert('Sorry, there was an error submitting your testimonial. Please try again later.');
+                });
+            });
+        }
+    </script>
+</body>
+</html>

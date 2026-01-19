@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Hallulies Hotel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="container">
+            <div class="admin-logo">
+                <img src="images/signboardTheBuilding.jpeg" alt="Hallulies Logo">
+                <h1>ADMIN DASHBOARD</h1>
+            </div>
+            <div class="admin-nav">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Administrator</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar">
+        <nav class="admin-nav-menu">
+            <ul>
+                <li>
+                    <a href="#" class="nav-link active" data-tab="dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-tab="bookings">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Bookings</span>
+                        <span class="badge">12</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-tab="menu">
+                        <i class="fas fa-utensils"></i>
+                        <span>Menu Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-tab="testimonials">
+                        <i class="fas fa-comments"></i>
+                        <span>Testimonials</span>
+                        <span class="badge">8</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-tab="users">
+                        <i class="fas fa-users"></i>
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-tab="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard">
+            <div class="dashboard-header">
+                <h2>Dashboard Overview</h2>
+                <div class="date-display">
+                    <i class="fas fa-calendar"></i>
+                    <span id="current-date"></span>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>847</h3>
+                        <p>Total Bookings</p>
+                    </div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>₵124,560</h3>
+                        <p>Revenue (30 days)</p>
+                    </div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+8%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>4.8</h3>
+                        <p>Average Rating</p>
+                    </div>
+                    <div class="stat-trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+0.2</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>1,234</h3>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="stat-trend negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>-3%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>New booking</strong> from John Smith for Deluxe Suite</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>New testimonial</strong> submitted by Sarah Johnson</p>
+                            <span class="activity-time">4 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Menu item updated</strong> - Grilled Salmon price changed</p>
+                            <span class="activity-time">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Tab -->
+        <div class="tab-content" id="bookings">
+            <div class="tab-header">
+                <h2>Booking Management</h2>
+                <button class="btn-primary" onclick="openModal('add-booking-modal')">
+                    <i class="fas fa-plus"></i> Add Booking
+                </button>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <select id="booking-status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date Range:</label>
+                    <input type="date" id="start-date">
+                    <input type="date" id="end-date">
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search bookings...">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Guest Name</th>
+                            <th>Room Type</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Smith</td>
+                            <td>Deluxe Suite</td>
+                            <td>2024-01-15</td>
+                            <td>2024-01-18</td>
+                            <td><span class="status-badge confirmed">Confirmed</span></td>
+                            <td>₵2,400</td>
+                            <td>
+                                <button class="action-btn view" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit" title="Edit Booking">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" title="Cancel Booking">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mary Johnson</td>
+                            <td>Standard Room</td>
+                            <td>2024-01-16</td>
+                            <td>2024-01-17</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td>₵800</td>
+                            <td>
+                                <button class="action-btn view" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn edit" title="Edit Booking">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" title="Cancel Booking">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Menu Management Tab -->
+        <div class="tab-content" id="menu">
+            <div class="tab-header">
+                <h2>Menu Management</h2>
+                <button class="btn-primary" onclick="openModal('add-menu-item-modal')">
+                    <i class="fas fa-plus"></i> Add Menu Item
+                </button>
+            </div>
+
+            <div class="menu-categories-admin">
+                <div class="category-section">
+                    <h3>Appetizers</h3>
+                    <div class="menu-items-list">
+                        <div class="menu-item-admin">
+                            <div class="item-info">
+                                <h4>Bruschetta Trio</h4>
+                                <p>Fresh tomatoes, basil, garlic on ciabatta</p>
+                                <div class="item-meta">
+                                    <span class="price">₵35</span>
+                                    <span class="tags">Vegetarian, Gluten-Free</span>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <button class="action-btn edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials Tab -->
+        <div class="tab-content" id="testimonials">
+            <div class="tab-header">
+                <h2>Testimonial Management</h2>
+                <div class="bulk-actions">
+                    <button class="btn-secondary">
+                        <i class="fas fa-check"></i> Approve Selected
+                    </button>
+                    <button class="btn-danger">
+                        <i class="fas fa-trash"></i> Delete Selected
+                    </button>
+                </div>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card-admin">
+                    <div class="testimonial-header">
+                        <div class="reviewer-info">
+                            <h4>John Smith</h4>
+                            <p>New York, USA</p>
+                        </div>
+                        <div class="testimonial-status">
+                            <span class="status-badge pending">Pending</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-content">
+                        <p>"Exceptional service and beautiful rooms. Will definitely stay again!"</p>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-actions">
+                        <button class="btn-success">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                        <button class="btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div class="tab-content" id="users">
+            <div class="tab-header">
+                <h2>User Management</h2>
+                <button class="btn-primary">
+                    <i class="fas fa-user-plus"></i> Add User
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <i class="fas fa-user-circle"></i>
+                                    <span>Admin User</span>
+                                </div>
+                            </td>
+                            <td>admin@hallulies.com</td>
+                            <td><span class="role-badge admin">Administrator</span></td>
+                            <td><span class="status-badge active">Active</span></td>
+                            <td>2 hours ago</td>
+                            <td>
+                                <button class="action-btn edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-content" id="analytics">
+            <div class="tab-header">
+                <h2>Analytics & Reports</h2>
+                <div class="report-filters">
+                    <select>
+                        <option>Last 7 Days</option>
+                        <option>Last 30 Days</option>
+                        <option>Last 90 Days</option>
+                        <option>Year to Date</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Booking Trends</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Chart visualization would appear here</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Revenue by Room Type</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-pie"></i>
+                        <p>Pie chart visualization would appear here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="settings">
+            <div class="tab-header">
+                <h2>System Settings</h2>
+            </div>
+
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <h3>General Settings</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Hotel Name</label>
+                            <input type="text" value="Hallulies Hotel & Restaurant/Bar">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Email</label>
+                            <input type="email" value="hallulies6@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" value="0247533518">
+                        </div>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="setting-card">
+                    <h3>Booking Settings</h3>
+                    <form class="settings-form">
+                        <div class="form-group">
+                            <label>Minimum Stay (nights)</label>
+                            <input type="number" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Cancellation Policy (hours)</label>
+                            <input type="number" value="24">
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" checked>
+                                Enable online bookings
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal" id="add-booking-modal">
+        <div class="modal-overlay" onclick="closeModal('add-booking-modal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Booking</h2>
+                <button class="close-btn" onclick="closeModal('add-booking-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="booking-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Guest Name *</label>
+                            <input type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Check-in Date *</label>
+                            <input type="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Check-out Date *</label>
+                            <input type="date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Room Type *</label>
+                            <select required>
+                                <option>Standard Room</option>
+                                <option>Deluxe Suite</option>
+                                <option>Family Room</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Number of Guests</label>
+                            <input type="number" min="1" value="2">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Special Requests</label>
+                        <textarea rows="3"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('add-booking-modal')">Cancel</button>
+                        <button type="submit" class="btn-primary">Create Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Admin Dashboard JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Tab switching
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active classes
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    tabContents.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding tab
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Modal functionality
+            window.openModal = function(modalId) {
+                document.getElementById(modalId).classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeModal = function(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+                document.body.style.overflow = 'auto';
+            };
+
+            // Logout function
+            window.logout = function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    // In real implementation, this would redirect to login page
+                    alert('Logged out successfully!');
+                    // window.location.href = 'login.html';
+                }
+            };
+
+            // Form submissions
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Form submitted successfully!');
+                    // In real implementation, this would send data to server
+                });
+            });
+
+            // Action buttons
+            const actionButtons = document.querySelectorAll('.action-btn');
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.title || this.querySelector('i').className.split('-')[1];
+                    console.log(`${action} button clicked`);
+                    // In real implementation, this would perform the specific action
+                });
+            });
+        });
+    </script>
+</body>
+</html>
