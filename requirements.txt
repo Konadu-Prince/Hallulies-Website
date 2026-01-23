@@ -1,2 +1,2 @@
-# No specific Python dependencies needed for the static file server
-# Python built-in modules are sufficient for serving static files
+# No additional Python packages needed beyond standard library
+# The server uses only built-in Python modules: http.server, socketserver, json, os, threading, time, urllib

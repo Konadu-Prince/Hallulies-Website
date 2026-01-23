@@ -10,6 +10,7 @@ Welcome to Hallulies Hotel & Restaurant/Bar, a luxury venue and restaurant locat
 - **Gallery**: Visual showcase of our facilities
 - **Testimonials**: Customer reviews and feedback
 - **Contact Form**: Easy communication with our team
+- **Self-Ping Mechanism**: Keeps the Render free tier server awake to prevent downtime
 
 ## Technology Stack
 
@@ -119,6 +120,20 @@ Hallulies-Website/
 The application uses the following environment variables (set automatically by Render):
 
 - `PORT`: Port number assigned by Render (defaults to 8000 if not set)
+- `PING_INTERVAL`: Time interval between self-pings in seconds (default: 900 = 15 minutes)
+- `ENABLE_SELF_PING`: Whether to enable self-ping functionality ('true' or 'false', default: 'true')
+- `EMAILJS_PUBLIC_KEY`: Public key for EmailJS service
+- `EMAILJS_SERVICE_ID`: Service ID for EmailJS
+
+## Self-Ping Mechanism
+
+To prevent the Render free tier server from sleeping due to inactivity, the application includes a self-ping mechanism that runs in a background thread. The server automatically pings itself at regular intervals to maintain uptime.
+
+- A background thread runs continuously and makes HTTP requests to the server's own URL
+- The self-ping uses a custom user agent: `Render-Self-Ping-Bot/1.0`
+- Logs are printed to track ping success/failure
+- Automatically detects the server's external URL on Render
+- Configurable via environment variables (see above)
 
 ## Troubleshooting
 
