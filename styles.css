@@ -499,28 +499,78 @@ section h2::after {
 
 .service-item {
     text-align: center;
-    padding: 0px 20px;
+    padding: 30px 20px;
     border-radius: 20px;
-    background: linear-gradient(135deg, #ffffff, #d2b48c);
-    transition: var(--transition);
-    border: 1px solid var(--secondary-color);
+    background: linear-gradient(135deg, #ffffff, #fff8e1);
+    transition: all 0.4s ease;
+    border: 2px solid rgba(210, 105, 30, 0.1);
+    box-shadow: 0 5px 15px rgba(210, 105, 30, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.service-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(210, 105, 30, 0.05), rgba(139, 69, 19, 0.05));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
 }
 
 .service-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(210, 105, 30, 0.2);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(210, 105, 30, 0.25);
     border-color: var(--primary-color);
 }
 
+.service-item:hover::before {
+    opacity: 1;
+}
+
+.service-item > * {
+    position: relative;
+    z-index: 2;
+}
+
 .service-icon {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    transition: transform 0.3s ease;
+}
+
+.service-item:hover .service-icon {
+    transform: scale(1.2);
 }
 
 .service-item h3 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     margin-bottom: 15px;
     color: var(--secondary-color);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.service-item:hover h3 {
+    color: var(--primary-color);
+}
+
+.service-item p {
+    color: #555;
+    line-height: 1.6;
+    transition: color 0.3s ease;
+}
+
+.service-item:hover p {
+    color: #333;
 }
 
 /* Testimonials Section */
