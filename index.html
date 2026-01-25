@@ -4,39 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Hallulies Hotel & Restaurant/Bar - Luxury venue and restaurant in Asufufu-Sunyani. Book comfortable accommodations with modern amenities for business and leisure travel.">
-    <meta name="keywords" content="Hallulies Hotel & Restaurant/Bar, luxury hotel Asufufu-Sunyani, best accommodation Sunyani, restaurant Sunyani, event hall Ghana, booking hotel Ghana, luxury rooms Ghana, bar and lounge Sunyani, wedding venue Sunyani, conference hall Sunyani">
+    <meta name="keywords" content="Hallulies Hotel, luxury hotel Asufufu-Sunyani, best accommodation Sunyani, restaurant Sunyani, event hall Ghana, booking hotel Ghana, luxury rooms Ghana, bar and lounge Sunyani, wedding venue Sunyani, conference hall Sunyani">
     <meta name="author" content="Hallulies Hotel & Restaurant/Bar">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
-    <meta name="geo.region" content="GH-02"> <!-- Western region of Ghana -->
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Critical Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="images/hall1.jpeg" as="image">
+    <link rel="preload" href="images/signboardTheBuilding.jpeg" as="image">
+    
+    <!-- Geo Metadata -->
+    <meta name="geo.region" content="GH-02">
     <meta name="geo.placename" content="Asufufu-Sunyani">
     <meta name="geo.position" content="7.0234;-2.3167">
     <meta name="ICBM" content="7.0234, -2.3167">
+    
+    <!-- Distribution -->
     <meta name="distribution" content="Global">
     <meta name="revisit-after" content="7 days">
-    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
     
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://hallulies-hotel.onrender.com/">
     <meta property="og:title" content="Hallulies Hotel & Restaurant/Bar - Luxury Venue & Restaurant in Asufufu-Sunyani">
     <meta property="og:description" content="Book comfortable accommodations at Hallulies Hotel & Restaurant/Bar in Asufufu-Sunyani. Modern amenities, excellent service, and convenient location for business and leisure travel.">
     <meta property="og:image" content="images/signboardTheBuilding.jpeg">
+    <meta property="og:image:alt" content="Hallulies Hotel & Restaurant/Bar Exterior">
+    <meta property="og:locale" content="en_GH">
     
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://hallulies-hotel.onrender.com/">
-    <meta property="twitter:title" content="Hallulies Hotel & Restaurant/Bar - Luxury Venue & Restaurant in Asufufu-Sunyani">
-    <meta property="twitter:description" content="Book comfortable accommodations at Hallulies Hotel & Restaurant/Bar in Asufufu-Sunyani. Modern amenities, excellent service, and convenient location for business and leisure travel.">
-    <meta property="twitter:image" content="images/signboardTheBuilding.jpeg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://hallulies-hotel.onrender.com/">
+    <meta name="twitter:title" content="Hallulies Hotel & Restaurant/Bar - Luxury Venue & Restaurant in Asufufu-Sunyani">
+    <meta name="twitter:description" content="Book comfortable accommodations at Hallulies Hotel & Restaurant/Bar in Asufufu-Sunyani. Modern amenities, excellent service, and convenient location for business and leisure travel.">
+    <meta name="twitter:image" content="images/signboardTheBuilding.jpeg">
+    <meta name="twitter:image:alt" content="Hallulies Hotel & Restaurant/Bar Exterior">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://hallulies-hotel.onrender.com/">
     
+    <!-- Favicon -->
+    <link rel="icon" href="images/signboardTheBuilding.jpeg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="images/signboardTheBuilding.jpeg">
+    
     <title>Hallulies Hotel & Restaurant/Bar - Luxury Accommodation in Asufufu-Sunyani | Book Now</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="images/signboardTheBuilding.jpeg" type="image/jpeg">
 </head>
 <body>
+    <!-- Skip to Content Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Main Content Wrapper -->
+    <main id="main-content">
     <!-- Schema.org structured data -->
     <script type="application/ld+json">
     {
@@ -114,16 +140,72 @@
         <div class="hero-content">
             <h1>Welcome to Hallulies Hotel & Restaurant/Bar</h1>
             <p>Your luxury venue & restaurant in the heart of Asufufu-Sunyani</p>
-            <a href="#rooms" class="btn-secondary">Explore Our Rooms</a>
+            <div class="hero-cta-buttons">
+                <a href="#rooms" class="btn-primary">Book Your Stay</a>
+                <a href="#services" class="btn-secondary">Explore Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Services Preview -->
+    <section id="services" class="services-preview">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Premium Services</h2>
+                <p>Experience luxury hospitality with our comprehensive offerings</p>
+            </div>
+            <div class="services-grid">               
+                <div class="service-card">
+                    <div class="service-icon">🏨</div>
+                    <h3>Luxury Accommodations</h3>
+                    <p>Premium rooms with modern amenities and personalized service</p>
+                    <a href="booking.html" class="card-cta">Book Now</a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🍽️</div>
+                    <h3>Fine Dining</h3>
+                    <p>Exquisite cuisine featuring local delicacies and international flavors</p>
+                    <a href="#restaurant" class="card-cta">View Menu</a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">🎪</div>
+                    <h3>Event Spaces</h3>
+                    <p>Versatile venues for weddings, corporate events, and celebrations</p>
+                    <a href="booking.html" class="card-cta">Plan Event</a>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
-            <h2>About Hallulies Hotel & Restaurant/Bar</h2>
-            <p>Hallulies is your premier destination in Asufufu-Sunyani for luxury accommodation, exquisite dining, and memorable events. We offer the perfect venue for birthdays, weddings, baby showers, parties, and more!</p>
-            <p>Our facility features luxury rooms, car park, recreational hall, bar/lounge, and Airbnb options. We specialize in local delicacies, pizza, continental dishes, beverages, and grilled items.</p>
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Hallulies Experience</h2>
+                    <p>Hallulies is your premier destination in Asufufu-Sunyani for luxury accommodation, exquisite dining, and memorable events. We offer the perfect venue for birthdays, weddings, baby showers, parties, and more!</p>
+                    <p>Our facility features luxury rooms, secure parking, recreational spaces, bar/lounge, and flexible event options. We specialize in local delicacies, continental dishes, beverages, and premium grilled items.</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">5★</span>
+                            <span class="stat-label">Guest Rating</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">Rooms Available</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">10+</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="images/signboardTheBuilding.jpeg" alt="Hallulies Hotel Exterior">
+                </div>
+            </div>
         </div>
     </section>
 
@@ -484,6 +566,8 @@
 
     <!-- Booking and Contact sections have been moved to separate pages -->
 
+    </main>
+    
     <!-- Footer -->
     <footer>
         <div class="container">
