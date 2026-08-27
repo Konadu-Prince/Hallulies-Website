@@ -280,6 +280,48 @@ mark {
     }
 }
 
+/* Brand theme overrides */
+.search-input,
+.filter-select {
+    color: var(--text-primary);
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+.search-input:focus,
+.filter-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(210, 155, 98, 0.25);
+}
+
+.search-button {
+    background: var(--primary);
+}
+
+.search-button:hover:not(:disabled) {
+    background: var(--primary-dark);
+}
+
+.search-results {
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.result-title,
+.result-category {
+    color: var(--primary);
+}
+
+.search-result-item:hover,
+.search-result-item[aria-selected="true"] {
+    background: rgba(98, 29, 37, 0.06);
+}
+
+mark {
+    background: var(--champagne);
+    color: var(--primary-dark);
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     .search-input,

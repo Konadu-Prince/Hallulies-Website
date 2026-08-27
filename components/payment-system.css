@@ -57,6 +57,44 @@
     background: #fafafa;
 }
 
+/* Brand theme overrides */
+.payment-system {
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+.method-option,
+.form-section {
+    background: var(--background);
+    border-color: var(--border);
+}
+
+.method-option:hover,
+.method-option.active {
+    border-color: var(--primary);
+    background: rgba(98, 29, 37, 0.08);
+}
+
+.order-summary {
+    background: linear-gradient(135deg, var(--surface), var(--champagne));
+    border-color: var(--gold);
+}
+
+.summary-divider,
+.summary-total {
+    border-color: var(--gold);
+}
+
+.pay-button {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 6px 20px rgba(61, 16, 22, 0.25);
+}
+
+.security-info {
+    background: #e7f1eb;
+    border-color: #b8d6c3;
+}
+
 .method-option:hover {
     border-color: var(--primary-color);
     background: rgba(210, 105, 30, 0.05);

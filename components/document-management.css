@@ -312,6 +312,47 @@
     box-shadow: 0 6px 20px rgba(210, 105, 30, 0.4);
 }
 
+/* Brand theme overrides */
+.document-management,
+.document-card {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+.documents-header,
+.document-actions {
+    border-color: var(--border);
+}
+
+.documents-header,
+.document-actions,
+.nav-tabs {
+    background: var(--background);
+}
+
+.nav-tab.active {
+    background: var(--surface);
+    color: var(--primary);
+}
+
+.upload-btn,
+.pay-now-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+}
+
+.refresh-btn,
+.filter-controls select,
+.search-box input {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text-primary);
+}
+
+.document-title,
+.documents-header h2 {
+    color: var(--primary);
+}
+
 /* States */
 .loading-state, .empty-state {
     grid-column: 1 / -1;

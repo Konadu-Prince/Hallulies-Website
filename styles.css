@@ -46,12 +46,27 @@
 
 /* Base Styles */
 :root {
-    --primary-color: #d2691e; /* Chocolate brown color */
-    --secondary-color: #8b4513; /* Saddle brown color */
-    --accent-color: #f5deb3; /* Wheat background color */
-    --text-color: #5d4037; /* Dark brown for text */
-    --light-color: #ffffff;
-    --dark-color: #3e2723; /* Dark brown for contrast */
+    --primary: #621D25;
+    --primary-dark: #3D1016;
+    --primary-light: #98635C;
+    --background: #F0EFF0;
+    --surface: #FFFFFF;
+    --dark: #181011;
+    --gold: #D29B62;
+    --champagne: #DBC9B0;
+    --warm-brown: #97542A;
+    --text-primary: #181011;
+    --text-secondary: #64595B;
+    --text-light: #FFFFFF;
+    --border: #D8D2D2;
+
+    /* Existing selector aliases */
+    --primary-color: var(--primary);
+    --secondary-color: var(--warm-brown);
+    --accent-color: var(--gold);
+    --text-color: var(--text-secondary);
+    --light-color: var(--surface);
+    --dark-color: var(--dark);
     --font-main: 'Arial', sans-serif;
     --transition: all 0.3s ease;
     --shadow: 0 4px 12px rgba(210, 105, 30, 0.2); /* Brown tinted shadow */
@@ -131,7 +146,7 @@ a:hover {
 
 .btn-secondary:hover {
     background: linear-gradient(135deg, var(--primary-color), #8b4513);
-    color: var(--light-color);
+    color: var( #98635C);
     border-color: var(--primary-color);
 }
 
@@ -627,15 +642,27 @@ section h2::after {
 
 :root {
     /* Enhanced Color Palette */
-    --primary-color: #D2691E;
-    --secondary-color: #8B4513;
-    --accent-color: #FFD700;
-    --text-dark: #2C1810;
-    --text-medium: #5D4037;
-    --text-light: #8D6E63;
-    --background-light: #FFF8F0;
-    --background-medium: #F5E9DC;
-    --white: #FFFFFF;
+    --primary: #621D25;
+    --primary-dark: #3D1016;
+    --primary-light: #98635C;
+    --background: #F0EFF0;
+    --surface: #FFFFFF;
+    --dark: #181011;
+    --gold: #D29B62;
+    --champagne: #DBC9B0;
+    --warm-brown: #97542A;
+    --text-primary: #181011;
+    --text-secondary: #64595B;
+    --text-light: #FFFFFF;
+    --border: #D8D2D2;
+    --primary-color: var(--primary);
+    --secondary-color: var(--warm-brown);
+    --accent-color: var(--gold);
+    --text-dark: var(--dark);
+    --text-medium: var(--text-secondary);
+    --background-light: var(--background);
+    --background-medium: var(--champagne);
+    --white: var(--surface);
     --success: #4CAF50;
     --warning: #FF9800;
     --error: #F44336;
@@ -4891,4 +4918,286 @@ footer {
     .services-grid {
         gap: 30px;
     }
+}
+
+/* Brand theme overrides */
+:root {
+    --shadow: 0 4px 18px rgba(61, 16, 22, 0.14);
+}
+
+body,
+.admin-body {
+    color: var(--text-primary);
+    background-color: var(--background);
+}
+
+header,
+.admin-header {
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--border);
+}
+
+.banner,
+footer,
+.review-stats {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.btn-primary,
+.card-cta,
+.toolbar-btn,
+.btn-add-to-cart,
+.btn-checkout,
+.upload-btn,
+.pay-button {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-color: var(--primary);
+}
+
+.btn-primary:hover,
+.card-cta:hover,
+.toolbar-btn:hover,
+.btn-add-to-cart:hover,
+.btn-checkout:hover,
+.upload-btn:hover,
+.pay-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.btn-secondary {
+    color: var(--primary);
+    background: var(--surface);
+    border: 2px solid var(--primary);
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: var(--text-light);
+}
+
+.about,
+.restaurant,
+.facilities,
+.services-preview,
+.testimonials,
+.testimonial-showcase,
+.all-reviews,
+.menu-categories,
+.interactive-menu,
+.documents-section,
+.gallery,
+.map {
+    background: linear-gradient(135deg, var(--background), var(--surface));
+}
+
+.room-card,
+.facility-item,
+.service-card,
+.review-card,
+.testimonial-card,
+.category-card,
+.menu-item-card,
+.document-card,
+.recent-activity,
+.table-container,
+.chart-card,
+.setting-card,
+.review-form-container,
+.contact-info,
+#booking-form,
+#contact-form {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+h1, h2, h3, h4, h5, h6,
+.logo h1,
+section h2 {
+    color: var(--text-primary);
+}
+
+.room-info h3,
+.service-card h3,
+.category-card h3,
+.item-header h4,
+.admin-logo h1,
+.dashboard-header h2,
+.tab-header h2,
+.price,
+.discount-price {
+    color: var(--primary);
+}
+
+p,
+.room-info p,
+.service-card p,
+.section-subtitle,
+.item-description,
+.form-help,
+.date-display,
+.user-info {
+    color: var(--text-secondary);
+}
+
+label,
+.filter-btn,
+.filter-options .filter-btn,
+.nav-link,
+.nav-tab,
+.result-category,
+.pdf-preview-link {
+    color: var(--primary);
+}
+
+input,
+select,
+textarea,
+.search-box input,
+.search-input,
+.filter-select {
+    color: var(--text-primary);
+    background-color: var(--surface);
+    border-color: var(--border);
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.search-box input:focus,
+.search-input:focus,
+.filter-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(210, 155, 98, 0.25);
+}
+
+nav ul li a:hover,
+.nav-link:hover,
+.nav-link.active,
+.filter-btn.active,
+.filter-btn:hover {
+    background-color: rgba(98, 29, 37, 0.1);
+    color: var(--primary);
+}
+
+.stat-number,
+.rating .fas,
+.stars .fas,
+.testimonial-rating .star,
+.stat-stars .fas {
+    color: var(--gold);
+}
+
+.featured-badge {
+    background: var(--champagne);
+    color: var(--primary-dark);
+}
+
+.tiktok-section {
+    background: var(--background);
+    padding: var(--spacing-3xl) 0;
+}
+
+.tiktok-section .section-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.tiktok-section .section-header p {
+    color: var(--text-secondary);
+}
+
+.tiktok-embed {
+    width: 100%;
+    max-width: 780px;
+    min-width: 288px;
+    min-height: 180px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--gold);
+    box-shadow: var(--shadow-lg);
+}
+
+.tiktok-embed a {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.pdf-modal-header,
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.hero::before,
+.hero-testimonial::before,
+.restaurant-hero::before {
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(61, 16, 22, 0.5) 100%);
+}
+
+.hero-testimonial,
+.restaurant-hero,
+.pdf-hero {
+    background-position: center;
+    background-size: cover;
+}
+
+.hero-testimonial {
+    background-image: linear-gradient(rgba(61, 16, 22, 0.45), rgba(98, 29, 37, 0.35)), url('images/hall1.jpeg');
+}
+
+.restaurant-hero {
+    background-image: linear-gradient(rgba(61, 16, 22, 0.45), rgba(98, 29, 37, 0.35)), url('images/restaurant-hero.jpg');
+}
+
+.pdf-hero {
+    background-image: linear-gradient(rgba(61, 16, 22, 0.45), rgba(98, 29, 37, 0.35)), url('images/pdf-hero.jpg');
+}
+
+.booking,
+.contact {
+    background-position: center;
+    background-size: cover;
+}
+
+.booking {
+    background-image: linear-gradient(rgba(61, 16, 22, 0.12), rgba(210, 155, 98, 0.12)), url('images/room1.1otherview.jpeg');
+}
+
+.contact {
+    background-image: linear-gradient(rgba(61, 16, 22, 0.12), rgba(210, 155, 98, 0.12)), url('images/sittingPlace1.jpeg');
+}
+
+.testimonial-marquee-container,
+.testimonial-card,
+.add-testimonial-section,
+.contact-info,
+#contact-form,
+#booking-form {
+    background: linear-gradient(135deg, var(--surface), var(--champagne));
+}
+
+.testimonial-callout {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+}
+
+.testimonial-callout .btn-primary {
+    background: var(--gold);
+    color: var(--primary-dark);
+    border-color: var(--gold);
+}
+
+.testimonial-callout .btn-primary:hover {
+    background: var(--champagne);
+    color: var(--primary-dark);
+}
+
+.footer-links ul li a,
+.social-media p,
+.social-links a {
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.footer-links ul li a:hover,
+.social-links a:hover {
+    color: var(--gold);
 }
