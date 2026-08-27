@@ -5128,6 +5128,18 @@ nav ul li a:hover,
     background: linear-gradient(135deg, var(--primary-dark), var(--primary));
 }
 
+.banner .btn-secondary {
+    background: var(--gold);
+    color: var(--primary-dark);
+    border-color: var(--gold);
+}
+
+.banner .btn-secondary:hover {
+    background: var(--champagne);
+    color: var(--primary-dark);
+    border-color: var(--champagne);
+}
+
 .hero::before,
 .hero-testimonial::before,
 .restaurant-hero::before {
