@@ -3,6 +3,11 @@ import socketserver
 import os
 import json
 import urllib.parse
+import urllib.request
+import urllib.error
+import secrets
+import smtplib
+from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 import hashlib
 import bcrypt
@@ -12,6 +17,12 @@ from functools import wraps
 
 PORT = int(os.environ.get('PORT', 8000))
 SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(32).hex()
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+APP_BASE_URL = os.environ.get('APP_BASE_URL', 'http://localhost:8000')
 
 # Database setup
 def init_database():
@@ -75,6 +86,18 @@ def init_database():
             image_url TEXT,
             is_active BOOLEAN DEFAULT 1,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS password_reset_tokens (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            token_hash TEXT UNIQUE NOT NULL,
+            expires_at TIMESTAMP NOT NULL,
+            used_at TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
         )
     ''')
     
@@ -165,6 +188,12 @@ def password_matches(password, password_hash):
 class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=os.getcwd(), **kwargs)
+
+    def end_headers(self):
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        super().end_headers()
     
     def do_OPTIONS(self):
         self.send_response(200)
@@ -172,9 +201,7 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
     
     def send_cors_headers(self):
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        return
     
     def do_GET(self):
         path = urllib.parse.urlparse(self.path).path
@@ -243,6 +270,12 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
             # API Routes
             if path == '/api/auth/login':
                 self.handle_login(data)
+            elif path == '/api/auth/google':
+                self.handle_google_login(data)
+            elif path == '/api/auth/password-reset/request':
+                self.handle_password_reset_request(data)
+            elif path == '/api/auth/password-reset/confirm':
+                self.handle_password_reset_confirm(data)
             elif path == '/api/auth/register':
                 self.handle_register(data)
             elif path == '/api/bookings':
@@ -404,6 +437,134 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'error': 'Invalid credentials'}).encode())
+
+    def handle_google_login(self, data):
+        credential = data.get('credential')
+        if not GOOGLE_CLIENT_ID:
+            self.send_response(503)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Google login is not configured'}).encode())
+            return
+        if not credential:
+            self.send_response(400)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Google credential is required'}).encode())
+            return
+
+        try:
+            query = urllib.parse.urlencode({'id_token': credential})
+            request = urllib.request.Request(f'https://oauth2.googleapis.com/tokeninfo?{query}')
+            with urllib.request.urlopen(request, timeout=10) as response:
+                google_user = json.loads(response.read().decode('utf-8'))
+        except (urllib.error.URLError, json.JSONDecodeError):
+            self.send_response(401)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Invalid Google credential'}).encode())
+            return
+
+        if google_user.get('aud') != GOOGLE_CLIENT_ID or google_user.get('email_verified') != 'true':
+            self.send_response(401)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Google account could not be verified'}).encode())
+            return
+
+        email = google_user.get('email', '').lower()
+        name = google_user.get('name') or email.split('@')[0]
+        username_base = ''.join(character for character in name.lower() if character.isalnum() or character in '_-')[:24] or 'google-user'
+        username = f"{username_base}_{google_user.get('sub', '')[-8:]}"
+        conn = sqlite3.connect('hallulies.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id, username, email, role FROM users WHERE email = ?', (email,))
+        user = cursor.fetchone()
+        if not user:
+            cursor.execute('INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)', (username, email, 'google-oauth'))
+            user = (cursor.lastrowid, username, email, 'user')
+            conn.commit()
+        conn.close()
+
+        token = jwt.encode({
+            'user_id': user[0],
+            'username': user[1],
+            'email': user[2],
+            'role': user[3],
+            'exp': datetime.utcnow() + timedelta(hours=24)
+        }, SECRET_KEY, algorithm='HS256')
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps({'token': token, 'user': {'id': user[0], 'username': user[1], 'email': user[2], 'role': user[3]}}).encode())
+
+    def handle_password_reset_request(self, data):
+        email = str(data.get('email', '')).strip().lower()
+        generic_response = {'message': 'If an account exists, a password reset link has been sent.'}
+        if '@' not in email:
+            self.send_json(generic_response, 200)
+            return
+
+        conn = sqlite3.connect('hallulies.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id FROM users WHERE email = ?', (email,))
+        user = cursor.fetchone()
+        if user:
+            raw_token = secrets.token_urlsafe(32)
+            token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
+            expires_at = datetime.utcnow() + timedelta(minutes=30)
+            cursor.execute('UPDATE password_reset_tokens SET used_at = CURRENT_TIMESTAMP WHERE user_id = ? AND used_at IS NULL', (user[0],))
+            cursor.execute('INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)', (user[0], token_hash, expires_at.isoformat()))
+            conn.commit()
+            reset_url = f'{APP_BASE_URL}/login.html?reset_token={urllib.parse.quote(raw_token)}'
+            self.send_reset_email(email, reset_url)
+        conn.close()
+        self.send_json(generic_response, 200)
+
+    def send_reset_email(self, email, reset_url):
+        if not EMAIL_HOST_USER or not EMAIL_HOST_PASSWORD:
+            return False
+        message = MIMEText(f'Use this link to reset your Hallulies password. It expires in 30 minutes:\n\n{reset_url}', 'plain')
+        message['Subject'] = 'Reset your Hallulies password'
+        message['From'] = EMAIL_HOST_USER
+        message['To'] = email
+        try:
+            with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT, timeout=10) as server:
+                server.starttls()
+                server.login(EMAIL_HOST_USER, EMAIL_HOST_PASSWORD)
+                server.send_message(message)
+            return True
+        except (OSError, smtplib.SMTPException):
+            return False
+
+    def handle_password_reset_confirm(self, data):
+        token = str(data.get('token', ''))
+        password = data.get('password', '')
+        if len(token) < 20 or len(password) < 8:
+            self.send_json({'error': 'A valid token and password of at least 8 characters are required'}, 400)
+            return
+
+        token_hash = hashlib.sha256(token.encode()).hexdigest()
+        conn = sqlite3.connect('hallulies.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT id, user_id FROM password_reset_tokens WHERE token_hash = ? AND used_at IS NULL AND expires_at > ?', (token_hash, datetime.utcnow().isoformat()))
+        reset = cursor.fetchone()
+        if not reset:
+            conn.close()
+            self.send_json({'error': 'Reset link is invalid or expired'}, 400)
+            return
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        cursor.execute('UPDATE users SET password_hash = ? WHERE id = ?', (password_hash, reset[1]))
+        cursor.execute('UPDATE password_reset_tokens SET used_at = CURRENT_TIMESTAMP WHERE id = ?', (reset[0],))
+        conn.commit()
+        conn.close()
+        self.send_json({'message': 'Password reset successfully. You can now sign in.'}, 200)
+
+    def send_json(self, data, status_code=200):
+        self.send_response(status_code)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(data).encode())
     
     def handle_register(self, data):
         username = str(data.get('username', '')).strip()

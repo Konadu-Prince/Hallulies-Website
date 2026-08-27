@@ -20,6 +20,8 @@
                     <i class="fas fa-user-circle"></i>
                     <span>Administrator</span>
                 </div>
+                <a class="btn-secondary" href="login.html">Sign in</a>
+                <div id="google-signin-button"></div>
                 <button class="logout-btn" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
@@ -555,8 +557,34 @@
         </div>
     </div>
 
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="script.js"></script>
     <script>
+        const googleClientId = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+
+        function handleGoogleSignIn(response) {
+            fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: response.credential })
+            })
+                .then(result => result.json().then(data => ({ ok: result.ok, data })))
+                .then(({ ok, data }) => {
+                    if (!ok) throw new Error(data.error || 'Google login failed');
+                    localStorage.setItem('hallulies_token', data.token);
+                    localStorage.setItem('hallulies_user', JSON.stringify(data.user));
+                    document.querySelector('.user-info span').textContent = data.user.email;
+                })
+                .catch(error => alert(error.message));
+        }
+
+        window.addEventListener('load', function() {
+            if (window.google && googleClientId !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+                google.accounts.id.initialize({ client_id: googleClientId, callback: handleGoogleSignIn });
+                google.accounts.id.renderButton(document.getElementById('google-signin-button'), { theme: 'outline', size: 'medium' });
+            }
+        });
+
         // Admin Dashboard JavaScript
         document.addEventListener('DOMContentLoaded', function() {
             // Set current date

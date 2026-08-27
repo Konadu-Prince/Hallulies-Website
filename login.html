@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Hallulies Lodge</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://accounts.google.com/gsi/client">
+</head>
+<body>
+    <main class="auth-page">
+        <section class="auth-panel" aria-labelledby="auth-title">
+            <a class="auth-brand" href="index.html">Hallulies Lodge</a>
+            <h1 id="auth-title">Sign in</h1>
+            <p id="auth-message" class="auth-message" aria-live="polite"></p>
+            <form id="login-form">
+                <label for="login-email">Email</label>
+                <input id="login-email" name="email" type="email" autocomplete="email" required>
+                <label for="login-password">Password</label>
+                <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+                <button class="btn-primary" type="submit">Sign in</button>
+            </form>
+            <button class="text-button" id="forgot-password" type="button">Forgot password?</button>
+            <div class="auth-divider">or</div>
+            <div id="google-signin-button"></div>
+            <a class="auth-back" href="index.html">Back to website</a>
+        </section>
+    </main>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+        const message = document.getElementById('auth-message');
+        const loginForm = document.getElementById('login-form');
+        const forgotButton = document.getElementById('forgot-password');
+        const params = new URLSearchParams(window.location.search);
+        const resetToken = params.get('reset_token');
+
+        function showMessage(text, isError = false) {
+            message.textContent = text;
+            message.className = `auth-message${isError ? ' error' : ''}`;
+        }
+
+        async function sendJson(url, body) {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || data.message || 'Request failed');
+            return data;
+        }
+
+        if (resetToken) {
+            document.getElementById('auth-title').textContent = 'Set a new password';
+            loginForm.innerHTML = `
+                <label for="new-password">New password</label>
+                <input id="new-password" type="password" minlength="8" autocomplete="new-password" required>
+                <button class="btn-primary" type="submit">Reset password</button>
+            `;
+            forgotButton.hidden = true;
+            document.querySelector('.auth-divider').hidden = true;
+            document.getElementById('google-signin-button').hidden = true;
+            loginForm.addEventListener('submit', async event => {
+                event.preventDefault();
+                try {
+                    await sendJson('/api/auth/password-reset/confirm', {
+                        token: resetToken,
+                        password: document.getElementById('new-password').value
+                    });
+                    showMessage('Password reset successfully. You can now sign in.');
+                    setTimeout(() => window.location.href = 'login.html', 1200);
+                } catch (error) {
+                    showMessage(error.message, true);
+                }
+            });
+        } else {
+            loginForm.addEventListener('submit', async event => {
+                event.preventDefault();
+                try {
+                    const data = await sendJson('/api/auth/login', {
+                        email: document.getElementById('login-email').value,
+                        password: document.getElementById('login-password').value
+                    });
+                    localStorage.setItem('hallulies_token', data.token);
+                    localStorage.setItem('hallulies_user', JSON.stringify(data.user));
+                    window.location.href = 'admin.html';
+                } catch (error) {
+                    showMessage(error.message, true);
+                }
+            });
+
+            forgotButton.addEventListener('click', async () => {
+                const email = document.getElementById('login-email').value;
+                if (!email) {
+                    showMessage('Enter your email address first.', true);
+                    return;
+                }
+                try {
+                    const data = await sendJson('/api/auth/password-reset/request', { email });
+                    showMessage(data.message);
+                } catch (error) {
+                    showMessage('Unable to request a password reset.', true);
+                }
+            });
+        }
+
+        function handleGoogleSignIn(response) {
+            sendJson('/api/auth/google', { credential: response.credential })
+                .then(data => {
+                    localStorage.setItem('hallulies_token', data.token);
+                    localStorage.setItem('hallulies_user', JSON.stringify(data.user));
+                    window.location.href = 'admin.html';
+                })
+                .catch(error => showMessage(error.message, true));
+        }
+
+        window.addEventListener('load', () => {
+            if (window.google && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' && !resetToken) {
+                google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleSignIn });
+                google.accounts.id.renderButton(document.getElementById('google-signin-button'), { theme: 'outline', size: 'large', width: 320 });
+            }
+        });
+    </script>
+</body>
+</html>
