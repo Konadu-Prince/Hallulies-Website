@@ -1,2 +1,0 @@
-# No additional Python packages needed beyond standard library
-# The server uses only built-in Python modules: http.server, socketserver, json, os, threading, time, urllib
