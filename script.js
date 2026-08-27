@@ -268,6 +268,14 @@ function initPaymentSystem() {
     // Booking form submission with payment processing
     const bookingForm = document.getElementById('booking-form');
     if (bookingForm) {
+        const whatsappButton = document.getElementById('whatsapp-booking-btn');
+        if (whatsappButton) {
+            whatsappButton.addEventListener('click', function() {
+                if (!bookingForm.reportValidity()) return;
+                sendBookingToWhatsApp(getBookingDataForWhatsApp());
+            });
+        }
+
         bookingForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -414,6 +422,7 @@ function submitBookingWithPayment(paymentResult) {
     .then(data => {
         if (data.booking_id) {
             console.log('SUCCESS!', data);
+            sendBookingToWhatsApp({ ...bookingData, booking_id: data.booking_id });
             showBookingFeedback('Booking confirmed successfully! We have sent a confirmation to your email.', 'success');
             
             // Show payment confirmation based on method
@@ -1664,4 +1673,38 @@ function downloadPdf() {
         link.click();
         document.body.removeChild(link);
     }
+}
+
+function getBookingDataForWhatsApp() {
+    return {
+        guest_name: document.getElementById('full-name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        checkin_date: document.getElementById('checkin').value,
+        checkout_date: document.getElementById('checkout').value,
+        room_type: document.getElementById('room-type').selectedOptions[0].textContent,
+        adults: document.getElementById('adults').value,
+        children: document.getElementById('children').value,
+        special_requests: document.getElementById('special-requests').value,
+        payment_method: document.querySelector('input[name="payment_method"]:checked')?.value || 'pay_later'
+    };
+}
+
+function sendBookingToWhatsApp(bookingData) {
+    const message = [
+        'New booking request for Hallulies Lodge',
+        bookingData.booking_id ? `Booking ID: ${bookingData.booking_id}` : '',
+        `Name: ${bookingData.guest_name}`,
+        `Check-in: ${bookingData.checkin_date}`,
+        `Check-out: ${bookingData.checkout_date}`,
+        `Room: ${bookingData.room_type}`,
+        `Guests: ${bookingData.adults} adults, ${bookingData.children} children`,
+        `Email: ${bookingData.email}`,
+        `Phone: ${bookingData.phone}`,
+        `Payment method: ${bookingData.payment_method}`,
+        bookingData.special_requests ? `Special requests: ${bookingData.special_requests}` : ''
+    ].filter(Boolean).join('\n');
+
+    const whatsappUrl = `https://wa.me/233558294527?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 }

@@ -40,6 +40,10 @@ class DocumentManagementSystem {
         try {
             this.state.isLoading = true;
             const response = await fetch(`${this.config.apiUrl}?view=${this.state.currentView}`);
+            if (!response.ok) {
+                this.state.documents = [];
+                return;
+            }
             const data = await response.json();
             this.state.documents = data.documents || [];
         } catch (error) {
@@ -578,6 +582,8 @@ class DocumentManagementSystem {
 
 // Initialize document management system
 document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector('#dashboard-content')) return;
+
     new DocumentManagementSystem({
         apiUrl: '/api/documents',
         uploadUrl: '/api/upload-document'

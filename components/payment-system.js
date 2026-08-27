@@ -270,7 +270,7 @@ class PaymentSystem {
         form.addEventListener('submit', this.handleSubmit.bind(this));
         
         // Real-time validation
-        this.setupFieldValidation();
+        this.setupValidation();
         
         // Card formatting
         this.setupCardFormatting();
@@ -409,6 +409,33 @@ class PaymentSystem {
             mobile_number: (value) => /^[\d\s]{10,}$/.test(value) ? null : 'Please enter a valid mobile number',
             account_number: (value) => /^\d{10,15}$/.test(value) ? null : 'Please enter a valid account number'
         };
+    }
+
+    setupCardFormatting() {
+        const cardNumber = this.elements.container.querySelector('#card_number');
+        if (cardNumber) {
+            cardNumber.addEventListener('input', (event) => {
+                const value = event.target.value.replace(/\D/g, '').slice(0, 19);
+                event.target.value = value.replace(/(.{4})/g, '$1 ').trim();
+            });
+        }
+
+        const expiryDate = this.elements.container.querySelector('#expiry_date');
+        if (expiryDate) {
+            expiryDate.addEventListener('input', (event) => {
+                const value = event.target.value.replace(/\D/g, '').slice(0, 4);
+                event.target.value = value.length > 2
+                    ? `${value.slice(0, 2)}/${value.slice(2)}`
+                    : value;
+            });
+        }
+
+        const cvv = this.elements.container.querySelector('#cvv');
+        if (cvv) {
+            cvv.addEventListener('input', (event) => {
+                event.target.value = event.target.value.replace(/\D/g, '').slice(0, 4);
+            });
+        }
     }
     
     async validateForm() {
@@ -619,8 +646,10 @@ class PaymentSystem {
 
 // Initialize payment system
 document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector('#booking-section')) return;
+
     new PaymentSystem({
-        stripePublicKey: 'pk_test_your_stripe_key_here',
+        stripePublicKey: window.STRIPE_PUBLISHABLE_KEY || null,
         currency: 'GHS',
         supportedMethods: ['card', 'mobile_money', 'bank_transfer']
     });
