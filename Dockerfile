@@ -11,4 +11,4 @@ COPY . /app
 EXPOSE 8000
 
 # Run the server when the container launches
-CMD ["python", "server.py"]
+CMD ["python", "api-server.py"]

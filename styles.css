@@ -5128,6 +5128,56 @@ nav ul li a:hover,
     background: linear-gradient(135deg, var(--primary-dark), var(--primary));
 }
 
+.chart-bars {
+    height: 220px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 12px;
+    padding: 20px 15px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.chart-bars span {
+    width: 12%;
+    min-height: 18px;
+    background: linear-gradient(180deg, var(--gold), var(--primary));
+    border-radius: 5px 5px 0 0;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.revenue-list {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+}
+
+.revenue-list div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    color: var(--text-secondary);
+}
+
+.revenue-list strong {
+    color: var(--primary);
+}
+
+.revenue-list b {
+    display: block;
+    grid-column: 1 / -1;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 4px;
+}
+
 .banner .btn-secondary {
     background: var(--gold);
     color: var(--primary-dark);

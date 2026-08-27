@@ -4,8 +4,8 @@
   "description": "Hallulies Pub - Luxury venue & restaurant in Asufufu-Sunyani, Ghana",
   "main": "index.html",
   "scripts": {
-    "start": "python server.py",
-    "dev": "python server.py"
+    "start": "python api-server.py",
+    "dev": "python api-server.py"
   },
   "keywords": [
     "hallulies",

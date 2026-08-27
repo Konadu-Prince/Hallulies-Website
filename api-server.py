@@ -5,12 +5,13 @@ import json
 import urllib.parse
 from datetime import datetime, timedelta
 import hashlib
+import bcrypt
 import jwt
 import sqlite3
 from functools import wraps
 
 PORT = int(os.environ.get('PORT', 8000))
-SECRET_KEY = os.environ.get('SECRET_KEY', 'hallulies_secret_key_2024')
+SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(32).hex()
 
 # Database setup
 def init_database():
@@ -155,6 +156,12 @@ def require_role(required_role):
         return wrapper
     return decorator
 
+def password_matches(password, password_hash):
+    try:
+        return bcrypt.checkpw(password.encode('utf-8'), password_hash.encode('utf-8'))
+    except (ValueError, TypeError):
+        return False
+
 class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=os.getcwd(), **kwargs)
@@ -170,32 +177,41 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     
     def do_GET(self):
+        path = urllib.parse.urlparse(self.path).path
         if self.path.startswith('/api/'):
             # API Routes
             self.send_cors_headers()
-            if self.path == '/api/bookings':
+            if path == '/api/bookings':
+                if not self.authorize_admin():
+                    return
                 self.handle_get_bookings()
-            elif self.path.startswith('/api/bookings/'):
+            elif path.startswith('/api/bookings/'):
+                if not self.authorize_admin():
+                    return
                 self.send_cors_headers()
-                booking_id = self.path.split('/')[-1]
+                booking_id = path.split('/')[-1]
                 self.handle_get_booking(booking_id)
-            elif self.path == '/api/testimonials':
+            elif path == '/api/testimonials':
                 self.send_cors_headers()
                 self.handle_get_testimonials()
-            elif self.path == '/api/menu':
+            elif path == '/api/menu':
                 self.send_cors_headers()
                 self.handle_get_menu()
-            elif self.path.startswith('/api/menu/category/'):
+            elif path.startswith('/api/menu/category/'):
                 self.send_cors_headers()
-                category = self.path.split('/')[-1]
+                category = path.split('/')[-1]
                 self.handle_get_menu_by_category(category)
-            elif self.path == '/api/analytics/dashboard':
+            elif path == '/api/analytics/dashboard':
+                if not self.authorize_admin():
+                    return
                 self.send_cors_headers()
                 self.handle_get_dashboard_analytics()
-            elif self.path == '/api/users/profile':
+            elif path == '/api/users/profile':
+                if not self.authorize_authenticated():
+                    return
                 self.send_cors_headers()
                 self.handle_get_user_profile()
-            elif self.path == '/api/docs':
+            elif path == '/api/docs':
                 self.send_cors_headers()
                 self.handle_api_docs()
             else:
@@ -209,6 +225,7 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
             super().do_GET()
     
     def do_POST(self):
+        path = urllib.parse.urlparse(self.path).path
         if self.path.startswith('/api/'):
             self.send_cors_headers()
             content_length = int(self.headers.get('Content-Length', 0))
@@ -224,17 +241,19 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
                 return
             
             # API Routes
-            if self.path == '/api/auth/login':
+            if path == '/api/auth/login':
                 self.handle_login(data)
-            elif self.path == '/api/auth/register':
+            elif path == '/api/auth/register':
                 self.handle_register(data)
-            elif self.path == '/api/bookings':
+            elif path == '/api/bookings':
                 self.handle_create_booking(data)
-            elif self.path == '/api/testimonials':
+            elif path == '/api/testimonials':
                 self.handle_create_testimonial(data)
-            elif self.path == '/api/menu':
+            elif path == '/api/menu':
+                if not self.authorize_admin():
+                    return
                 self.handle_create_menu_item(data)
-            elif self.path == '/api/contact':
+            elif path == '/api/contact':
                 self.handle_contact_form(data)
             else:
                 self.send_response(404)
@@ -244,9 +263,44 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_response(404)
             self.end_headers()
+
+    def get_current_user(self):
+        auth_header = self.headers.get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            return None
+        try:
+            token = auth_header.split(' ', 1)[1]
+            return jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        except jwt.InvalidTokenError:
+            return None
+
+    def authorize_authenticated(self):
+        user = self.get_current_user()
+        if not user:
+            self.send_response(401)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Authentication required'}).encode())
+            return False
+        self.current_user = user
+        return True
+
+    def authorize_admin(self):
+        if not self.authorize_authenticated():
+            return False
+        if self.current_user.get('role') != 'admin':
+            self.send_response(403)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Admin access required'}).encode())
+            return False
+        return True
     
     def do_PUT(self):
+        path = urllib.parse.urlparse(self.path).path
         if self.path.startswith('/api/'):
+            if not self.authorize_admin():
+                return
             self.send_cors_headers()
             content_length = int(self.headers.get('Content-Length', 0))
             put_data = self.rfile.read(content_length) if content_length > 0 else b''
@@ -260,17 +314,17 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({'error': 'Invalid JSON'}).encode())
                 return
             
-            if self.path.startswith('/api/bookings/'):
+            if path.startswith('/api/bookings/'):
                 self.send_cors_headers()
-                booking_id = self.path.split('/')[-1]
+                booking_id = path.split('/')[-1]
                 self.handle_update_booking(booking_id, data)
-            elif self.path.startswith('/api/testimonials/'):
+            elif path.startswith('/api/testimonials/'):
                 self.send_cors_headers()
-                testimonial_id = self.path.split('/')[-1]
+                testimonial_id = path.split('/')[-1]
                 self.handle_update_testimonial(testimonial_id, data)
-            elif self.path.startswith('/api/menu/'):
+            elif path.startswith('/api/menu/'):
                 self.send_cors_headers()
-                menu_id = self.path.split('/')[-1]
+                menu_id = path.split('/')[-1]
                 self.handle_update_menu_item(menu_id, data)
             else:
                 self.send_cors_headers()
@@ -283,16 +337,19 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
     
     def do_DELETE(self):
+        path = urllib.parse.urlparse(self.path).path
         if self.path.startswith('/api/'):
+            if not self.authorize_admin():
+                return
             self.send_cors_headers()
-            if self.path.startswith('/api/bookings/'):
-                booking_id = self.path.split('/')[-1]
+            if path.startswith('/api/bookings/'):
+                booking_id = path.split('/')[-1]
                 self.handle_delete_booking(booking_id)
-            elif self.path.startswith('/api/testimonials/'):
-                testimonial_id = self.path.split('/')[-1]
+            elif path.startswith('/api/testimonials/'):
+                testimonial_id = path.split('/')[-1]
                 self.handle_delete_testimonial(testimonial_id)
-            elif self.path.startswith('/api/menu/'):
-                menu_id = self.path.split('/')[-1]
+            elif path.startswith('/api/menu/'):
+                menu_id = path.split('/')[-1]
                 self.handle_delete_menu_item(menu_id)
             else:
                 self.send_response(404)
@@ -321,8 +378,7 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
         user = cursor.fetchone()
         conn.close()
         
-        # Simple password check (in production, use proper hashing)
-        if user and user[3] == '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/RK.PZvO.S':  # bcrypt hash of "admin123"
+        if user and password_matches(password, user[3]):
             token = jwt.encode({
                 'user_id': user[0],
                 'username': user[1],
@@ -350,11 +406,38 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({'error': 'Invalid credentials'}).encode())
     
     def handle_register(self, data):
-        # Registration logic here
+        username = str(data.get('username', '')).strip()
+        email = str(data.get('email', '')).strip().lower()
+        password = data.get('password', '')
+        if len(username) < 3 or '@' not in email or len(password) < 8:
+            self.send_response(400)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Username, valid email, and password of at least 8 characters are required'}).encode())
+            return
+
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        try:
+            conn = sqlite3.connect('hallulies.db')
+            cursor = conn.cursor()
+            cursor.execute(
+                'INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)',
+                (username, email, password_hash)
+            )
+            user_id = cursor.lastrowid
+            conn.commit()
+            conn.close()
+        except sqlite3.IntegrityError:
+            self.send_response(409)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Username or email already exists'}).encode())
+            return
+
         self.send_response(201)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
-        self.wfile.write(json.dumps({'message': 'User registered successfully'}).encode())
+        self.wfile.write(json.dumps({'message': 'User registered successfully', 'user_id': user_id}).encode())
     
     def handle_create_booking(self, data):
         required_fields = ['guest_name', 'email', 'checkin_date', 'checkout_date', 'room_type']
@@ -363,6 +446,26 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps({'error': 'Missing required fields'}).encode())
+            return
+
+        try:
+            checkin = datetime.strptime(data['checkin_date'], '%Y-%m-%d').date()
+            checkout = datetime.strptime(data['checkout_date'], '%Y-%m-%d').date()
+            adults = int(data.get('adults', 1))
+            children = int(data.get('children', 0))
+        except (TypeError, ValueError):
+            self.send_response(400)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Invalid booking dates or guest counts'}).encode())
+            return
+
+        valid_rooms = {'standard', 'deluxe', 'suite', 'family', 'event-hall'}
+        if checkin < datetime.utcnow().date() or checkout <= checkin or adults < 1 or adults > 10 or children < 0 or data['room_type'] not in valid_rooms:
+            self.send_response(400)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': 'Invalid booking details'}).encode())
             return
         
         conn = sqlite3.connect('hallulies.db')
@@ -584,12 +687,6 @@ class HalluliesAPIHandler(http.server.SimpleHTTPRequestHandler):
                 }
             },
             "authentication": "Use Bearer token in Authorization header",
-            "sample_data": {
-                "login_request": {
-                    "email": "admin@hallulies.com",
-                    "password": "admin123"
-                }
-            }
         }
         
         self.send_response(200)
@@ -949,8 +1046,7 @@ if __name__ == "__main__":
     
     # Start server
     with socketserver.TCPServer(("0.0.0.0", PORT), HalluliesAPIHandler) as httpd:
-        print(f"🚀 Hallulies Hotel API Server running at http://0.0.0.0:{PORT}")
-        print("🔐 Admin login: admin@hallulies.com / admin123")
+        print(f"Hallulies Hotel API Server running at http://0.0.0.0:{PORT}")
         print("📚 API Documentation: http://0.0.0.0:8000/api/docs")
         print("Press Ctrl+C to stop the server")
         

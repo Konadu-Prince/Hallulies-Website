@@ -34,6 +34,7 @@ class DocumentManagementSystem {
         await this.loadDocuments();
         this.createDOMElements();
         this.bindEvents();
+        this.filterAndRenderDocuments();
     }
     
     async loadDocuments() {
@@ -41,19 +42,42 @@ class DocumentManagementSystem {
             this.state.isLoading = true;
             const response = await fetch(`${this.config.apiUrl}?view=${this.state.currentView}`);
             if (!response.ok) {
-                this.state.documents = [];
-                return;
+                throw new Error(`Documents request failed: ${response.status}`);
             }
             const data = await response.json();
-            this.state.documents = data.documents || [];
+            if (!Array.isArray(data.documents)) {
+                throw new Error('Invalid documents response');
+            }
+            this.state.documents = data.documents;
         } catch (error) {
             console.error('Failed to load documents:', error);
-            this.showNotification('Failed to load documents', 'error');
+            this.state.documents = [];
+            if (this.elements.container) {
+                this.showNotification('Failed to load documents', 'error');
+            }
         } finally {
             this.state.isLoading = false;
         }
     }
-    
+
+    async requestJson(url, options = {}) {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Document request failed: ${response.status}`);
+        }
+        return response.json();
+    }
+
+    escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>'"]/g, character => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[character]));
+    }
+
     createDOMElements() {
         this.elements.container = document.createElement('div');
         this.elements.container.className = 'document-management';
@@ -123,8 +147,7 @@ class DocumentManagementSystem {
             </div>
         `;
         
-        // Insert into admin or user dashboard
-        const dashboard = document.querySelector('#dashboard-content') || document.body;
+        const dashboard = document.querySelector('#dashboard-content');
         dashboard.appendChild(this.elements.container);
     }
     
@@ -163,18 +186,18 @@ class DocumentManagementSystem {
                 <div class="document-header">
                     <div class="document-icon">${fileTypeIcon}</div>
                     <div class="document-status ${statusClass}">
-                        ${doc.status}
+                        ${this.escapeHtml(doc.status)}
                     </div>
                 </div>
                 
                 <div class="document-content">
-                    <h3 class="document-title">${doc.title}</h3>
-                    <p class="document-description">${doc.description || 'No description'}</p>
+                    <h3 class="document-title">${this.escapeHtml(doc.title)}</h3>
+                    <p class="document-description">${this.escapeHtml(doc.description || 'No description')}</p>
                     
                     <div class="document-meta">
-                        <span class="document-date">📅 ${this.formatDate(doc.created_at)}</span>
-                        <span class="document-amount">💰 ${doc.currency} ${doc.amount}</span>
-                        <span class="document-size">💾 ${this.formatFileSize(doc.file_size)}</span>
+                        <span class="document-date">📅 ${this.escapeHtml(this.formatDate(doc.created_at))}</span>
+                        <span class="document-amount">💰 ${this.escapeHtml(doc.currency)} ${this.escapeHtml(doc.amount)}</span>
+                        <span class="document-size">💾 ${this.escapeHtml(this.formatFileSize(doc.file_size))}</span>
                     </div>
                 </div>
                 
@@ -238,7 +261,7 @@ class DocumentManagementSystem {
         this.elements.container.querySelector(`[data-view="${view}"]`).classList.add('active');
         
         this.state.currentView = view;
-        this.loadDocuments();
+        this.loadDocuments().then(() => this.filterAndRenderDocuments());
     }
     
     handleSearch(e) {
@@ -304,19 +327,40 @@ class DocumentManagementSystem {
     
     async viewDocument(docId) {
         try {
-            const response = await fetch(`${this.config.apiUrl}/${docId}/view`);
-            const data = await response.json();
-            
+            const data = await this.requestJson(`${this.config.apiUrl}/${encodeURIComponent(docId)}/view`);
             // Open document in modal or new tab
             this.openDocumentViewer(data);
         } catch (error) {
             this.showNotification('Failed to load document', 'error');
         }
     }
+
+    openDocumentViewer(documentData) {
+        const modal = document.createElement('div');
+        modal.className = 'upload-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>${this.escapeHtml(documentData.id || 'Document')}</h3>
+                    <button class="close-btn" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>${this.escapeHtml(documentData.content || 'Document preview unavailable.')}</p>
+                    ${documentData.url ? `<a class="btn-primary" href="${this.escapeHtml(documentData.url)}" target="_blank" rel="noopener">Open File</a>` : ''}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.querySelector('.close-btn').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', event => {
+            if (event.target === modal) modal.remove();
+        });
+    }
     
     async downloadDocument(docId) {
         try {
-            const response = await fetch(`${this.config.apiUrl}/${docId}/download`);
+            const response = await fetch(`${this.config.apiUrl}/${encodeURIComponent(docId)}/download`);
+            if (!response.ok) throw new Error(`Download failed: ${response.status}`);
             const blob = await response.blob();
             
             // Create download link
@@ -337,8 +381,8 @@ class DocumentManagementSystem {
     
     async shareDocument(docId) {
         try {
-            const response = await fetch(`${this.config.apiUrl}/${docId}/share-link`);
-            const data = await response.json();
+            const data = await this.requestJson(`${this.config.apiUrl}/${encodeURIComponent(docId)}/share-link`);
+            if (!data.share_link) throw new Error('Missing share link');
             
             // Copy share link to clipboard
             await navigator.clipboard.writeText(data.share_link);
@@ -352,9 +396,10 @@ class DocumentManagementSystem {
         if (!confirm('Are you sure you want to delete this document?')) return;
         
         try {
-            await fetch(`${this.config.apiUrl}/${docId}`, { method: 'DELETE' });
+            await this.requestJson(`${this.config.apiUrl}/${encodeURIComponent(docId)}`, { method: 'DELETE' });
             this.showNotification('Document deleted successfully', 'success');
-            this.loadDocuments(); // Reload documents
+            await this.loadDocuments();
+            this.filterAndRenderDocuments();
         } catch (error) {
             this.showNotification('Failed to delete document', 'error');
         }
@@ -453,13 +498,14 @@ class DocumentManagementSystem {
                 method: 'POST',
                 body: formData
             });
-            
+            if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
             const result = await response.json();
             
             if (result.success) {
                 this.showNotification('Document uploaded successfully', 'success');
                 document.querySelector('.upload-modal').remove();
-                this.loadDocuments(); // Reload documents
+                await this.loadDocuments();
+                this.filterAndRenderDocuments();
             } else {
                 this.showNotification(result.message || 'Upload failed', 'error');
             }
@@ -576,7 +622,7 @@ class DocumentManagementSystem {
     }
     
     refreshDocuments() {
-        this.loadDocuments();
+        this.loadDocuments().then(() => this.filterAndRenderDocuments());
     }
 }
 

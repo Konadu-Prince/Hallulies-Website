@@ -407,7 +407,9 @@ function submitBookingWithPayment(paymentResult) {
         children: document.getElementById('children').value,
         special_requests: document.getElementById('special-requests').value,
         payment_method: paymentResult.method,
-        total_amount: 0 // This would be calculated based on room type and duration
+        total_amount: Number.parseFloat(
+            document.getElementById('summary-total')?.textContent.replace(/[^\d.]/g, '') || '0'
+        )
     };
     
     // Send booking request to API
@@ -418,7 +420,10 @@ function submitBookingWithPayment(paymentResult) {
         },
         body: JSON.stringify(bookingData)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error(`Booking request failed: ${response.status}`);
+        return response.json();
+    })
     .then(data => {
         if (data.booking_id) {
             console.log('SUCCESS!', data);
@@ -1409,7 +1414,7 @@ Special Requests: ${document.getElementById('special-requests') ? document.getEl
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize booking form if it exists
     const bookingForm = document.getElementById('booking-form');
-    if (bookingForm) {
+    if (bookingForm && !window.location.pathname.includes('booking.html')) {
         handleFormSubmitWithAPI('booking-form');
     }
     
